@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Aide-mémoire PowerShell</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <script type="module" src="assets/app.js"></script>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap top__inner">
+      <div>
+        <div class="eyebrow">Aide-mémoire</div>
+        <h1>Commandes <span class="ps">PowerShell</span></h1>
+      </div>
+
+      <div class="search">
+        <svg class="search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>
+        </svg>
+        <input id="search" class="search__input" type="search" autocomplete="off"
+               placeholder="Chercher une commande (ex. service, dossier, registre…)"
+               aria-label="Chercher une commande">
+        <span class="search__key" aria-hidden="true">/</span>
+      </div>
+
+      <div id="chips" class="chips" role="toolbar" aria-label="Filtrer par module"></div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div id="list" class="list">
+      <p class="empty">Chargement des commandes…</p>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,638 @@
+{
+  "$schema": "./commandes.schema.json",
+  "modules": [
+    "Processus",
+    "Services",
+    "Tâches programmées",
+    "Surveillance du système",
+    "Base de registre",
+    "Journaux d'événements",
+    "Maintenance",
+    "CIM",
+    "Installation d'applications (winget)",
+    "Commandes de base"
+  ],
+  "commandes": [
+    {
+      "module": "Processus",
+      "categorie": "Consulter",
+      "commande": "Get-Process",
+      "description": "Lister les processus en cours (nom, PID, CPU, mémoire)",
+      "exemples": [
+        "Get-Process",
+        "Get-Process -Name \"notepad\""
+      ]
+    },
+    {
+      "module": "Processus",
+      "categorie": "Lancer / arrêter",
+      "commande": "Start-Process",
+      "description": "Lancer un programme (avec ou sans arguments)",
+      "exemples": [
+        "Start-Process \"notepad\"",
+        "Start-Process -FilePath \"notepad.exe\" -ArgumentList \"C:\\fichier.txt\""
+      ]
+    },
+    {
+      "module": "Processus",
+      "categorie": "Lancer / arrêter",
+      "commande": "Stop-Process",
+      "description": "Arrêter (forcer la fermeture) d'un processus",
+      "exemples": [
+        "Stop-Process -Id 1234",
+        "Stop-Process -Name \"notepad\""
+      ]
+    },
+    {
+      "module": "Processus",
+      "categorie": "Lancer / arrêter",
+      "commande": "Wait-Process",
+      "description": "Attendre qu'un processus se termine",
+      "exemples": [
+        "Wait-Process -Id 1234",
+        "Wait-Process -Name \"notepad\" -Timeout 60"
+      ]
+    },
+    {
+      "module": "Services",
+      "categorie": "Consulter",
+      "commande": "Get-Service",
+      "description": "Lister les services",
+      "exemples": [
+        "Get-Service",
+        "Get-Service | Format-Table Name, Status, DisplayName"
+      ]
+    },
+    {
+      "module": "Services",
+      "categorie": "Démarrer / arrêter",
+      "commande": "Start-Service",
+      "description": "Démarrer un service",
+      "exemples": [
+        "Start-Service -Name \"Spooler\""
+      ]
+    },
+    {
+      "module": "Services",
+      "categorie": "Démarrer / arrêter",
+      "commande": "Stop-Service",
+      "description": "Arrêter un service",
+      "exemples": [
+        "Stop-Service -Name \"Spooler\""
+      ]
+    },
+    {
+      "module": "Services",
+      "categorie": "Démarrer / arrêter",
+      "commande": "Restart-Service",
+      "description": "Redémarrer un service",
+      "exemples": [
+        "Restart-Service -Name \"Spooler\""
+      ]
+    },
+    {
+      "module": "Services",
+      "categorie": "Configurer",
+      "commande": "Set-Service",
+      "description": "Changer le type de démarrage (Automatic, Manual, Disabled)",
+      "exemples": [
+        "Set-Service -Name \"Spooler\" -StartupType Automatic"
+      ]
+    },
+    {
+      "module": "Tâches programmées",
+      "categorie": "Créer (dans l'ordre)",
+      "commande": "New-ScheduledTaskTrigger",
+      "description": "1- Quand la tâche démarre",
+      "exemples": [
+        "$trigger = New-ScheduledTaskTrigger -Daily -At 08:00",
+        "$trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(1)"
+      ]
+    },
+    {
+      "module": "Tâches programmées",
+      "categorie": "Créer (dans l'ordre)",
+      "commande": "New-ScheduledTaskAction",
+      "description": "2- Ce que la tâche exécute",
+      "exemples": [
+        "$action = New-ScheduledTaskAction -Execute \"notepad.exe\"",
+        "$action = New-ScheduledTaskAction -Execute \"powershell.exe\" -Argument \"-File C:\\Scripts\\MonScript.ps1\""
+      ]
+    },
+    {
+      "module": "Tâches programmées",
+      "categorie": "Créer (dans l'ordre)",
+      "commande": "Register-ScheduledTask",
+      "description": "3- Enregistrer la tâche dans le Planificateur",
+      "exemples": [
+        "Register-ScheduledTask -TaskName \"MaTache\" -Action $action -Trigger $trigger -TaskPath \"MonDossier\""
+      ]
+    },
+    {
+      "module": "Tâches programmées",
+      "categorie": "Consulter / supprimer",
+      "commande": "Get-ScheduledTask",
+      "description": "Voir une tâche et son état",
+      "exemples": [
+        "$task = Get-ScheduledTask -TaskName \"MaTache\"",
+        "$task.State"
+      ]
+    },
+    {
+      "module": "Tâches programmées",
+      "categorie": "Consulter / supprimer",
+      "commande": "Unregister-ScheduledTask",
+      "description": "Supprimer une tâche",
+      "exemples": [
+        "Unregister-ScheduledTask -TaskName \"MaTache\""
+      ]
+    },
+    {
+      "module": "Tâches programmées",
+      "categorie": "Créer un dossier de tâches",
+      "commande": "New-Object -ComObject",
+      "description": "Créer un dossier dans le Planificateur",
+      "exemples": [
+        "$s = New-Object -ComObject schedule.service",
+        "$s.connect()",
+        "$s.GetFolder(\"\\\").CreateFolder(\"MonDossier\")"
+      ]
+    },
+    {
+      "module": "Surveillance du système",
+      "categorie": "Explorer",
+      "commande": "Get-Counter -ListSet *",
+      "description": "Lister tous les ensembles de compteurs",
+      "exemples": [
+        "Get-Counter -ListSet *",
+        "(Get-Counter -ListSet *).CounterSetName"
+      ]
+    },
+    {
+      "module": "Surveillance du système",
+      "categorie": "Explorer",
+      "commande": "Get-Counter -ListSet <Nom>",
+      "description": "Voir un ensemble précis",
+      "exemples": [
+        "Get-Counter -ListSet Processeur"
+      ]
+    },
+    {
+      "module": "Surveillance du système",
+      "categorie": "Explorer",
+      "commande": "(…).Counter",
+      "description": "Voir seulement les noms des compteurs",
+      "exemples": [
+        "(Get-Counter -ListSet Mémoire).Counter"
+      ]
+    },
+    {
+      "module": "Surveillance du système",
+      "categorie": "Lire une valeur",
+      "commande": "Get-Counter \"<Chemin>\"",
+      "description": "Valeur actuelle d'un compteur",
+      "exemples": [
+        "Get-Counter \"\\Processeur(_total)\\% temps processeur\""
+      ]
+    },
+    {
+      "module": "Base de registre",
+      "categorie": "Lire",
+      "commande": "Get-Item",
+      "description": "Lire une clé",
+      "exemples": [
+        "Get-Item \"HKCU:\\Software\\7-Zip\""
+      ]
+    },
+    {
+      "module": "Base de registre",
+      "categorie": "Lire",
+      "commande": "Get-ItemProperty",
+      "description": "Lire les valeurs d'une clé",
+      "exemples": [
+        "Get-ItemProperty \"HKCU:\\Software\\7-Zip\""
+      ]
+    },
+    {
+      "module": "Base de registre",
+      "categorie": "Créer",
+      "commande": "New-Item",
+      "description": "Créer une clé",
+      "exemples": [
+        "New-Item -Path \"HKCU:\\Software\" -Name \"MonApp\""
+      ]
+    },
+    {
+      "module": "Base de registre",
+      "categorie": "Créer",
+      "commande": "New-ItemProperty",
+      "description": "Créer une valeur dans une clé",
+      "exemples": [
+        "New-ItemProperty -Path \"HKCU:\\Software\\MonApp\" -Name \"Version\" -Value \"1.0\""
+      ]
+    },
+    {
+      "module": "Base de registre",
+      "categorie": "Modifier",
+      "commande": "Set-Item",
+      "description": "Modifier le contenu d'une clé",
+      "exemples": [
+        "Set-Item \"HKCU:\\Software\\7-Zip\" -Value \"NewValue\""
+      ]
+    },
+    {
+      "module": "Base de registre",
+      "categorie": "Modifier",
+      "commande": "Set-ItemProperty",
+      "description": "Modifier une valeur (-Name = nom, -Value = contenu)",
+      "exemples": [
+        "Set-ItemProperty \"HKCU:\\Software\\7-Zip\" -Name \"Path\" -Value \"C:\\NewPath\""
+      ]
+    },
+    {
+      "module": "Base de registre",
+      "categorie": "Supprimer",
+      "commande": "Remove-Item",
+      "description": "Supprimer une clé",
+      "exemples": [
+        "Remove-Item \"HKCU:\\Software\\MonApp\""
+      ]
+    },
+    {
+      "module": "Base de registre",
+      "categorie": "En ligne de commande",
+      "commande": "reg",
+      "description": "Outil reg.exe : add, query, delete, export, import, copy…",
+      "exemples": [
+        "reg query \"HKCU\\Software\\7-Zip\""
+      ]
+    },
+    {
+      "module": "Journaux d'événements",
+      "categorie": "Lire",
+      "commande": "Get-WinEvent",
+      "description": "Lire un journal",
+      "exemples": [
+        "Get-WinEvent -LogName 'System'"
+      ]
+    },
+    {
+      "module": "Journaux d'événements",
+      "categorie": "Lire",
+      "commande": "Get-WinEvent -FilterHashTable",
+      "description": "Filtrer (ex. par ID d'événement)",
+      "exemples": [
+        "Get-WinEvent -FilterHashTable @{LogName='System'; ID=6008}"
+      ]
+    },
+    {
+      "module": "Journaux d'événements",
+      "categorie": "Créer / écrire",
+      "commande": "New-EventLog",
+      "description": "Créer un journal et une source",
+      "exemples": [
+        "New-EventLog -LogName \"MonJournal\" -Source \"MonApplication\""
+      ]
+    },
+    {
+      "module": "Journaux d'événements",
+      "categorie": "Créer / écrire",
+      "commande": "Write-EventLog",
+      "description": "Écrire un événement dans un journal",
+      "exemples": [
+        "Write-EventLog -LogName \"MonJournal\" -Source \"MonApplication\" -EventID 1001 -EntryType Information -Message \"Ceci est un test\""
+      ]
+    },
+    {
+      "module": "Maintenance",
+      "categorie": "Sauvegarde",
+      "commande": "Robocopy",
+      "description": "Copier / synchroniser un dossier (/MIR = miroir)",
+      "exemples": [
+        "Robocopy \"C:\\Données\" \"E:\\Sauvegardes\" /MIR"
+      ]
+    },
+    {
+      "module": "Maintenance",
+      "categorie": "Nettoyage",
+      "commande": "Clear-RecycleBin",
+      "description": "Vider la corbeille",
+      "exemples": [
+        "Clear-RecycleBin -Drive \"C:\" -Force"
+      ]
+    },
+    {
+      "module": "Maintenance",
+      "categorie": "Nettoyage",
+      "commande": "cleanmgr",
+      "description": "Ouvrir le nettoyage de disque",
+      "exemples": [
+        "cleanmgr"
+      ]
+    },
+    {
+      "module": "CIM",
+      "categorie": "Commandes",
+      "commande": "Get-CimInstance",
+      "description": "Lire les objets d'une classe CIM",
+      "exemples": [
+        "Get-CimInstance -ClassName Win32_OperatingSystem"
+      ]
+    },
+    {
+      "module": "CIM",
+      "categorie": "Commandes",
+      "commande": "$obj.Propriété",
+      "description": "Lire une seule propriété",
+      "exemples": [
+        "$os = Get-CimInstance -ClassName Win32_OperatingSystem",
+        "Write-Host $os.Version"
+      ]
+    },
+    {
+      "module": "CIM",
+      "categorie": "Commandes",
+      "commande": "Get-CimClass",
+      "description": "Lister toutes les classes CIM",
+      "exemples": [
+        "Get-CimClass"
+      ]
+    },
+    {
+      "module": "CIM",
+      "categorie": "Commandes",
+      "commande": "| Select-Object *",
+      "description": "Afficher toutes les propriétés",
+      "exemples": [
+        "Get-CimInstance -ClassName Win32_Processor | Select-Object *"
+      ]
+    },
+    {
+      "module": "CIM",
+      "categorie": "Classes principales",
+      "commande": "Win32_OperatingSystem",
+      "description": "Nom, version, architecture, mémoire, date d'installation",
+      "exemples": [
+        "Get-CimInstance -ClassName Win32_OperatingSystem"
+      ]
+    },
+    {
+      "module": "CIM",
+      "categorie": "Classes principales",
+      "commande": "Win32_Processor",
+      "description": "Processeur : cœurs, threads, fréquence",
+      "exemples": [
+        "Get-CimInstance -ClassName Win32_Processor"
+      ]
+    },
+    {
+      "module": "CIM",
+      "categorie": "Classes principales",
+      "commande": "Win32_LogicalDisk",
+      "description": "Lecteurs : taille, espace libre",
+      "exemples": [
+        "Get-CimInstance -ClassName Win32_LogicalDisk"
+      ]
+    },
+    {
+      "module": "CIM",
+      "categorie": "Classes principales",
+      "commande": "Win32_ComputerSystem",
+      "description": "Nom du PC, fabricant, modèle, mémoire",
+      "exemples": [
+        "Get-CimInstance -ClassName Win32_ComputerSystem"
+      ]
+    },
+    {
+      "module": "Installation d'applications (winget)",
+      "categorie": "Chercher",
+      "commande": "winget search",
+      "description": "Chercher une application",
+      "exemples": [
+        "winget search firefox"
+      ],
+      "aValider": true
+    },
+    {
+      "module": "Installation d'applications (winget)",
+      "categorie": "Chercher",
+      "commande": "winget show",
+      "description": "Voir les détails d'une application",
+      "exemples": [
+        "winget show --id Mozilla.Firefox"
+      ],
+      "aValider": true
+    },
+    {
+      "module": "Installation d'applications (winget)",
+      "categorie": "Installer / désinstaller",
+      "commande": "winget install",
+      "description": "Installer une application",
+      "exemples": [
+        "winget install --id Mozilla.Firefox -e",
+        "winget install --id 7zip.7zip -e --silent --accept-package-agreements --accept-source-agreements"
+      ],
+      "aValider": true
+    },
+    {
+      "module": "Installation d'applications (winget)",
+      "categorie": "Installer / désinstaller",
+      "commande": "winget uninstall",
+      "description": "Désinstaller une application",
+      "exemples": [
+        "winget uninstall --id Mozilla.Firefox"
+      ],
+      "aValider": true
+    },
+    {
+      "module": "Installation d'applications (winget)",
+      "categorie": "Consulter / mettre à jour",
+      "commande": "winget list",
+      "description": "Lister les applications installées",
+      "exemples": [
+        "winget list",
+        "winget list firefox"
+      ],
+      "aValider": true
+    },
+    {
+      "module": "Installation d'applications (winget)",
+      "categorie": "Consulter / mettre à jour",
+      "commande": "winget upgrade",
+      "description": "Voir les mises à jour disponibles",
+      "exemples": [
+        "winget upgrade"
+      ],
+      "aValider": true
+    },
+    {
+      "module": "Installation d'applications (winget)",
+      "categorie": "Consulter / mettre à jour",
+      "commande": "winget upgrade --id",
+      "description": "Mettre à jour une application",
+      "exemples": [
+        "winget upgrade --id Mozilla.Firefox"
+      ],
+      "aValider": true
+    },
+    {
+      "module": "Installation d'applications (winget)",
+      "categorie": "Consulter / mettre à jour",
+      "commande": "winget upgrade --all",
+      "description": "Mettre à jour toutes les applications",
+      "exemples": [
+        "winget upgrade --all"
+      ],
+      "aValider": true
+    },
+    {
+      "module": "Installation d'applications (winget)",
+      "categorie": "Exporter / importer",
+      "commande": "winget export",
+      "description": "Sauvegarder la liste des applications",
+      "exemples": [
+        "winget export -o \"C:\\apps.json\""
+      ],
+      "aValider": true
+    },
+    {
+      "module": "Installation d'applications (winget)",
+      "categorie": "Exporter / importer",
+      "commande": "winget import",
+      "description": "Réinstaller les applications d'une liste",
+      "exemples": [
+        "winget import -i \"C:\\apps.json\""
+      ],
+      "aValider": true
+    },
+    {
+      "module": "Commandes de base",
+      "categorie": "Explorer",
+      "commande": "Get-ChildItem",
+      "description": "Lister le contenu d'un dossier",
+      "exemples": [
+        "Get-ChildItem \"C:\\Scripts\"",
+        "Get-ChildItem -Path \"C:\\Scripts\" -Filter *.txt -Recurse"
+      ]
+    },
+    {
+      "module": "Commandes de base",
+      "categorie": "Créer",
+      "commande": "New-Item -ItemType Directory",
+      "description": "Créer un dossier",
+      "exemples": [
+        "New-Item -Path \"C:\\Scripts\" -ItemType Directory"
+      ]
+    },
+    {
+      "module": "Commandes de base",
+      "categorie": "Créer",
+      "commande": "New-Item -ItemType File",
+      "description": "Créer un fichier",
+      "exemples": [
+        "New-Item -Path \"C:\\Scripts\\notes.txt\" -ItemType File"
+      ]
+    },
+    {
+      "module": "Commandes de base",
+      "categorie": "Créer",
+      "commande": "Test-Path",
+      "description": "Vérifier si un fichier ou dossier existe",
+      "exemples": [
+        "if (-not (Test-Path \"C:\\Scripts\")) { New-Item -Path \"C:\\Scripts\" -ItemType Directory }"
+      ]
+    },
+    {
+      "module": "Commandes de base",
+      "categorie": "Lire / écrire un fichier",
+      "commande": "Get-Content",
+      "description": "Lire un fichier",
+      "exemples": [
+        "Get-Content \"C:\\Scripts\\notes.txt\"",
+        "Get-Content \"C:\\Scripts\\log.txt\" -Tail 10"
+      ]
+    },
+    {
+      "module": "Commandes de base",
+      "categorie": "Lire / écrire un fichier",
+      "commande": "Set-Content",
+      "description": "Écrire dans un fichier (remplace le contenu)",
+      "exemples": [
+        "Set-Content -Path \"C:\\Scripts\\notes.txt\" -Value \"Bonjour\""
+      ]
+    },
+    {
+      "module": "Commandes de base",
+      "categorie": "Lire / écrire un fichier",
+      "commande": "Add-Content",
+      "description": "Ajouter une ligne à la fin d'un fichier",
+      "exemples": [
+        "Add-Content -Path \"C:\\Scripts\\notes.txt\" -Value \"Nouvelle ligne\""
+      ]
+    },
+    {
+      "module": "Commandes de base",
+      "categorie": "Lire / écrire un fichier",
+      "commande": "Out-File",
+      "description": "Envoyer le résultat d'une commande dans un fichier",
+      "exemples": [
+        "Get-Process | Out-File \"C:\\Scripts\\processus.txt\""
+      ]
+    },
+    {
+      "module": "Commandes de base",
+      "categorie": "Afficher / demander",
+      "commande": "Write-Host",
+      "description": "Afficher un message",
+      "exemples": [
+        "Write-Host \"Bonjour !\" -ForegroundColor Green"
+      ]
+    },
+    {
+      "module": "Commandes de base",
+      "categorie": "Afficher / demander",
+      "commande": "Read-Host",
+      "description": "Demander une valeur à l'utilisateur",
+      "exemples": [
+        "$nom = Read-Host \"Entrez votre nom\""
+      ]
+    },
+    {
+      "module": "Commandes de base",
+      "categorie": "Afficher / demander",
+      "commande": "Get-Date",
+      "description": "Date et heure actuelles",
+      "exemples": [
+        "Get-Date",
+        "Get-Date -Format \"yyyy-MM-dd\""
+      ]
+    },
+    {
+      "module": "Commandes de base",
+      "categorie": "Filtrer / trier / exporter",
+      "commande": "Where-Object",
+      "description": "Filtrer des résultats",
+      "exemples": [
+        "Get-Service | Where-Object { $_.Status -eq \"Running\" }"
+      ]
+    },
+    {
+      "module": "Commandes de base",
+      "categorie": "Filtrer / trier / exporter",
+      "commande": "Sort-Object",
+      "description": "Trier des résultats",
+      "exemples": [
+        "Get-Process | Sort-Object CPU -Descending"
+      ]
+    },
+    {
+      "module": "Commandes de base",
+      "categorie": "Filtrer / trier / exporter",
+      "commande": "Select-Object",
+      "description": "Choisir des colonnes ou les premiers résultats",
+      "exemples": [
+        "Get-Process | Select-Object Name, Id -First 5"
+      ]
+    }
+  ]
+}

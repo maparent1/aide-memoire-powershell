@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Commandes de l'aide-mémoire PowerShell",
+  "type": "object",
+  "required": [
+    "modules",
+    "commandes"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "modules": {
+      "description": "Ordre d'affichage des modules.",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "commandes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "module",
+          "commande",
+          "description",
+          "exemples"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "module": {
+            "description": "Nom du module (doit aussi figurer dans « modules »).",
+            "type": "string",
+            "minLength": 1
+          },
+          "categorie": {
+            "description": "Regroupement dans le module (ex. Consulter, Créer).",
+            "type": "string"
+          },
+          "commande": {
+            "description": "Nom de la commande affiché en gras.",
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "description": "À quoi ça sert.",
+            "type": "string"
+          },
+          "exemples": {
+            "description": "Un exemple par élément ; chacun a son bouton de copie.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "aValider": {
+            "description": "true = cachée aux étudiants pour l'instant.",
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }
+}
